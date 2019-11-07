@@ -1,6 +1,6 @@
-# Medical artificial intelligence, spring, 2018
-# Project3
-# BMED 2013250622 Junjae LEE
+
+# Implementation of CNN Classifier
+
 import CNN_classifier
 import keras
 from keras.datasets import cifar10
