@@ -33,6 +33,30 @@ CIFAR-10 dataset 은 10개의 클래스와 각 클래스별로 각각 5000개의
 
 ## Architecture
 
+여러 주목받은 CNN 아키텍처들을 따라 이번 프로젝트의 아키텍처를 만들어 나갔지만 모든 아키텍처들의 특징들을 포함시키려는 시도를 한 것은 아니며, 주로 kernel-size, layers 의 depth, dropout, FC layers 등이 아키텍처에 어떤 영향을 주는지에 중점을 두었다. 여기서 VGGNet 을 많이 참고하였다.
+
+고전적인 CNN 구조인 LeNet5 는 총 3개의 conv layer, 2개의 sub-sampling layer 및 1개의 FC layer 로 구성되어 있다. 해당 논문에서 단계별 영상을 통해 CNN 이 topology shift, noise 에 robust 하다는 것을 밝혔고, 망의 규모가 최종 성능에 미치는 방향성을 보여주었다. 2012년의 AlexNet 은 5개의 conv layer 와 3개의 FC layer 로 구성되어 구조적으로는 LeNet5와 비슷하지만 더 깊은 망을 가지는 아키텍처를 가지게 되었다. AlexNet 에서는 GPU 를 병렬적으로 사용하였고, 여러 kernel-size 를 적용한 conv layer 와 activation function 으로 ReLU 를 사용한 것이 큰 특징이다. 여기까지 봤을 때 다음과 같은 상상을 할 수 있는데, CNN 망을 옆으로 누운 피라미드와 같은 형태로 계속 크기를 늘려간다면 언젠간 100%에 근접하는 성능을 보여주지 않을까 라는 것이다. 하지만 실제로는 아주 다양한 요인들에 의해 힘들다는 것이 실험적으로 밝혀졌다. 먼저 망의 규모가 커지면 자연적으로 파라미터의 수가 늘어난다. 이는 필연적으로 overfitting 을 발생시키게 되고 학습의 속도까지 저하시킨다. 또한, 망이 깊어질수록 gradient 가 옅어져서 vanishing gradient 문제가 발생한다.
+
+어떻게 망의 깊이를 늘려 아키텍처의 잠재력을 올릴 수 있을까 고민한 것이 2014년의 GoogLeNet 과 VGGNet 이다. 또한, 이 프로젝트에서 구현할 아키텍처도 VGGNet 을 기반으로 시작할 것이기 때문에 앞서 설명한 아키텍처들과 어떠한 차이점이 있는지 알아볼 것이다.
+
+먼저 VGGNet 의 구조는 다음과 같다. (CIFAR-10 이 아닌 image net 을 dataset 으로 함.) 
+
+![table3](/table3.PNG)
+<br/>
+![table4](/table4.PNG)
+<br/>
+첫번째로 Table 3 의 D 를 기반으로 vgg_a 를 구현하였는데, VGGNet 에서는 이전의 아키텍처와 다르게 모든 kernel-size 를 3 x 3 size 이하로 하고 대신 여러 개의 conv layer 를 stack 하는 방식으로 하나의 블록을 형성하였다. 이것을 Factorization into smaller convolutions 이라고 하는데 이를 통해 파라미터의 수는 줄이고 망이 깊어지는 효과를 얻었다. 5 x 5 size 의 필터가 3 x 3 필터 두개가 stack 되는 형태로 대체되어 비용은 28% 줄이고 feature 를 뽑아내는 비선형성을 늘이는 효과를 얻는 것이다.
+
+![figure1](/figure1.PNG)
+<br/>
+하지만 VGGNet 은 AlexNet 과 마찬가지로 마지막의 3개의 FC layer 때문에 파라미터의 개수가 비대하게 크다. 따라서 두번째로 테스트 해볼 아키텍처로 FC layer 을 제거한 vgg_b 를 선택하고 vgg_a 와 비교하여 FC layer 를 제거했을 때의 성능을 비교할 것이다. 세번째는 vgg_b 에서 dropout 을 추가한 vgg_c 형태를 추가로 선택하여 앞의 두 형태와 비교할 것이다. 마지막으로, 망의 깊이를 더 늘렸을 때 성능이 더 늘어나는지 확인하기 위해 vgg_d 를 추가하였다. 따라서 위 4개의 아키텍처의 구조를 표로 나타낸 결과는 다음과 같다.
+
+![table5_1](/table5_1.PNG)
+<br/>
+![table5_2](/table5_2.PNG)
+<br/>
+vgg_a, b, c, d 의 train_acc 와 val_acc 의 결과는 Result 에서 확인 할 수 있다. vgg_c_nd 는 data augmentation 을 하지 않은 경우를 비교하기 위해 수행한 case 이다.
+
 ## Training
 
 ## Result
