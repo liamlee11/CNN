@@ -52,7 +52,6 @@ CIFAR-10 dataset 은 10개의 클래스와 각 클래스별로 각각 5000개의
 하지만 VGGNet 은 AlexNet 과 마찬가지로 마지막의 3개의 FC layer 때문에 파라미터의 개수가 비대하게 크다. 따라서 두번째로 테스트 해볼 아키텍처로 FC layer 을 제거한 vgg_b 를 선택하고 vgg_a 와 비교하여 FC layer 를 제거했을 때의 성능을 비교할 것이다. 세번째는 vgg_b 에서 dropout 을 추가한 vgg_c 형태를 추가로 선택하여 앞의 두 형태와 비교할 것이다. 마지막으로, 망의 깊이를 더 늘렸을 때 성능이 더 늘어나는지 확인하기 위해 vgg_d 를 추가하였다. 따라서 위 4개의 아키텍처의 구조를 표로 나타낸 결과는 다음과 같다.
 
 ![table5_1](/table5_1.PNG)
-<br/>
 ![table5-2](/table5-2.PNG)
 <br/>
 vgg_a, b, c, d 의 train_acc 와 val_acc 의 결과는 Result 에서 확인 할 수 있다. vgg_c_nd 는 data augmentation 을 하지 않은 경우를 비교하기 위해 수행한 case 이다.
