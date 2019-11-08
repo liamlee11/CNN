@@ -39,16 +39,16 @@ CIFAR-10 dataset 은 10개의 클래스와 각 클래스별로 각각 5000개의
 
 어떻게 망의 깊이를 늘려 아키텍처의 잠재력을 올릴 수 있을까 고민한 것이 2014년의 GoogLeNet 과 VGGNet 이다. 또한, 이 프로젝트에서 구현할 아키텍처도 VGGNet 을 기반으로 시작할 것이기 때문에 앞서 설명한 아키텍처들과 어떠한 차이점이 있는지 알아볼 것이다.
 
-먼저 VGGNet 의 구조는 다음과 같다. (CIFAR-10 이 아닌 image net 을 dataset 으로 함.) 
+먼저 VGGNet 의 구조는 다음과 같다. (CIFAR-10 이 아닌 image net 을 dataset 으로 함.) <br/>
 
 ![table3](/table3.PNG)
 <br/>
 ![table4](/table4.PNG)
-<br/>
+<br/><br/>
 첫번째로 Table 3 의 D 를 기반으로 vgg_a 를 구현하였는데, VGGNet 에서는 이전의 아키텍처와 다르게 모든 kernel-size 를 3 x 3 size 이하로 하고 대신 여러 개의 conv layer 를 stack 하는 방식으로 하나의 블록을 형성하였다. 이것을 Factorization into smaller convolutions 이라고 하는데 이를 통해 파라미터의 수는 줄이고 망이 깊어지는 효과를 얻었다. 5 x 5 size 의 필터가 3 x 3 필터 두개가 stack 되는 형태로 대체되어 비용은 28% 줄이고 feature 를 뽑아내는 비선형성을 늘이는 효과를 얻는 것이다.
 
 ![figure1](/figure1.PNG)
-<br/>
+<br/><br/>
 하지만 VGGNet 은 AlexNet 과 마찬가지로 마지막의 3개의 FC layer 때문에 파라미터의 개수가 비대하게 크다. 따라서 두번째로 테스트 해볼 아키텍처로 FC layer 을 제거한 vgg_b 를 선택하고 vgg_a 와 비교하여 FC layer 를 제거했을 때의 성능을 비교할 것이다. 세번째는 vgg_b 에서 dropout 을 추가한 vgg_c 형태를 추가로 선택하여 앞의 두 형태와 비교할 것이다. 마지막으로, 망의 깊이를 더 늘렸을 때 성능이 더 늘어나는지 확인하기 위해 vgg_d 를 추가하였다. 따라서 위 4개의 아키텍처의 구조를 표로 나타낸 결과는 다음과 같다.
 
 ![table5_1](/table5_1.PNG)
@@ -83,11 +83,11 @@ Data augmentation 은 width_shift, height_shift 범위를 각각 10% 로 주었�
 Table 6 는 각 아키텍처에서 1 epoch 시 걸리는 시간을 측정한 것이다. Table 7 은 각 아키텍처에서 수렴하는 val_acc 를 측정한 것이다.
 
 ![figure23](/figure23.PNG)
-<br/>
+<br/><br/>
 Figure 2 는 vgg_a model 에 대해 BN layer 가 있을 때와 없을 때의 학습 상태를 비교한 것이다. 그래프의 결과를 통해 batch normalization 의 필요성을 확인 할 수 있었고, 따라서 vgg_a, b, c, d 모든 models 에 대해 batch normalization 을 포함하였다. Figure 3 은 vgg_c model 에 대해 data augmentation 을 수행한 경우와 수행하지 않은 경우를 비교한 것이다. 수행하지 않은 경우는 수행한 경우보다 수렴이 시작하는 지점이 빨랐지만, overfitting 정도가 훨씬 심하고 val_acc 의 수렴점도 약 1.9% 정도 더 낮았다. 따라서 data augmentation 은 overfitting 을 줄일 수 있을 뿐만 아니라 성능 한계도 늘릴 수 있음을 알 수 있다.
 
 ![figure4](/figure4.PNG)
-<br/>
+<br/><br/>
 
 Figure 4 는 Table 5 모델들에 대한 epoch 에 따른 train acc 와 val acc 의 결과를 그래프로 나타낸 것이다. 모든 결과에서 learning rate 가 감소하는 지점에서 acc jumping 이 관찰되고, 이는 학습이 진행되면서 lr 을 감소시키는 전략이 유효하게 작용한 것임을 알 수 있다. 학습이 수렴을 향한다는 뜻은 local minima 에 빠졌거나 더 깊은 convex 안으로 들어가지 못하는 것을 뜻하므로 만약 후자라면 learning rate 를 줄여 더 깊은 convex 로 진입하도록 유도할 수 있다.
 
@@ -98,7 +98,7 @@ vgg_a 와 vgg_b model 모두 overfitting 현상이 크게 발생됨을 확인 �
 마지막으로 layer 의 depth 를 더 깊게 했을 때 성능이 어떻게 변하는지 비교하였다. vgg_d 는 vgg_c 에서 layer 를 3개 더 추가한 model 인데 오히려 overfitting 이 심해지고 수렴하는 정확도도 4.3% 낮았다. 이는 parameter 수가 늘어나 전체 model 의 capacity 가 data 에 비해 커져서 발생한 것이다.  수렴하는 정확도가 낮아진 것은 망이 깊어져서 vanishing gradient 문제가 심화되었기 때문이다.
 
 ![figure5](/figure5.PNG)
-<br/>
+<br/><br/>
 Figure 5 은 vgg_c model 에 대해 batch size 를 64를 한 경우와 512를 한 경우를 비교한 것이다. 결과를 통해 학습 속도를 높이기 위해 batch size 를 늘린 것이 오히려 overfitting 발생하고 더 낮은 값에서 수렴하는 역효과를 낳은 것을 확인 할 수 있다. 따라서 batch size 를 적절하게 낮추어(최종적으로 batch size = 32 으로 설정하였음) overfitting 현상을 억제 할 수 있다.(batch normalization 에 의한 regularizer 효과로 보인다.)
 
 위 결과들을 종합해 보면 FC layer 는 CIFAR-10 dataset 에 대해서는 제거해도 큰 변함이 없었다. 오히려 성능이 소폭 상승하였고 아키텍처를 간결화 시키고 파라미터 수를 줄이는 효과가 있었다. 이는 Network in network paper by Lin et al [11] 에서 망을 깊게 하여 모델의 추상화를 높이기 위하여 mlpconv layer 를 쌓는 구조를 만들고 마지막 레이어에 FC layer 를 쓰는 대신 global average pooling 층을 적용하여 FC layer 가 가지고 있던 overfitting 문제와 dropout 에 의존하고 있는 문제를 해결한 것과 함께 생각해볼 수 있다. GoogLeNet 의 inception module 또한 layer 수준에서 해석하여 얻은 결과이다.
