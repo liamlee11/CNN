@@ -11,6 +11,5 @@
 ## Devices and Programs
 
 ![table1](/table1.PNG)
-<br/><br/>
-
+<br/>
 Batch-size 의 경우 tensorflow-gpu 사용시 사용된 GPU 의 메모리에 크게 영향을 받는다. 위 디바이스 환경에서 batch-size 가 128인 경우 OOM(Out of Memory) Error 가 간헐적으로 발생하여 모든 코드에서 batch-size 를 64로 설정하였다. 나중에 또 언급할 것이지만 batch-size 는 학습속도에 크게 영향을 주는 파라미터이므로 자신의 디바이스 환경을 잘 알고 허용되는 범위에서 설정해주어야 한다.
