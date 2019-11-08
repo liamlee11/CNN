@@ -53,7 +53,7 @@ CIFAR-10 dataset 은 10개의 클래스와 각 클래스별로 각각 5000개의
 
 ![table5_1](/table5_1.PNG)
 <br/>
-![table5-2](/table5_2.PNG)
+![table5-2](/table5-2.PNG)
 <br/>
 vgg_a, b, c, d 의 train_acc 와 val_acc 의 결과는 Result 에서 확인 할 수 있다. vgg_c_nd 는 data augmentation 을 하지 않은 경우를 비교하기 위해 수행한 case 이다.
 
